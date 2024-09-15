@@ -36,7 +36,7 @@ var once sync.Once
 
 func Get() *Bot {
 	once.Do(func() {
-		instance = NewBot("6189055077:AAFP714IMfX7SkOW95Jyzwn3NF4Fcf46m34")
+		instance = NewBot("")
 	})
 	return instance
 }
