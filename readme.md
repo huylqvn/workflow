@@ -114,27 +114,31 @@ end
 
 ![system-design](assets/system-design.png)
 
-### Note:
-1. User: The starting point of the process, the user interacts with the system through the user interface.
-2. ALB (Application Load Balancer): A load balancer, distributing traffic to different microservices in the system.
-3. UI workflow: User interface, where users perform tasks and interact with the system.
-4. api-service: Service that provides APIs (application programming interfaces) for other components to interact with each other.
-5. scheduler-service: Scheduler service, responsible for scheduling and managing jobs to be performed.
-6. worker-service: Service that executes jobs scheduled by the scheduler-service.
-7. 3PL-service: Third-party service, providing additional functionality to the system.
-8. Postgres HA: Relational database, designed to ensure high availability.
-9. Redis Cluster: NoSQL database, often used to store cache data, sessions, and configurations.
-10. ConfigMap and Secret: Used in Kubernetes to store configurations and sensitive information of services.
-11. Monitoring: The monitoring system includes tools such as ElasticSearch, Kibana, APM, Logstash and Fluentd to track and analyze system performance.
+### Explanation:
+```
+* User: The starting point of the process, the user interacts with the system through the user interface.
+* ALB (Application Load Balancer): A load balancer, distributing traffic to different microservices in the system.
+* UI workflow: User interface, where users perform tasks and interact with the system.
+* api-service: Service that provides APIs (application programming interfaces) for other components to interact with each other.
+* scheduler-service: Scheduler service, responsible for scheduling and managing jobs to be performed.
+* worker-service: Service that executes jobs scheduled by the scheduler-service.
+* 3PL-service: Third-party service, providing additional functionality to the system.
+* Postgres HA: Relational database, designed to ensure high availability.
+* Redis Cluster: NoSQL database, often used to store cache data, sessions, and configurations.
+* ConfigMap and Secret: Used in Kubernetes to store configurations and sensitive information of services.
+* Monitoring: The monitoring system includes tools such as ElasticSearch, Kibana, APM, Logstash and Fluentd to track and analyze system performance.
+```
 
-## How it works:
+## Flow User Test:
+```
 1. The user interacts with the workflow UI.
-2. The workflow UI sends requests to the api-service via the ALB.
-3. The api-service processes the requests and may call other services such as the scheduler-service to schedule jobs or the 3PL-service to perform additional functions.
-4. The scheduler-service stores the schedule in a Postgres database and uses Redis to manage pending jobs.
-5. The worker-service continuously checks the queue in Redis and executes the scheduled jobs.
-6. The 3PL-service executes the jobs assigned by the worker-service.
-7. The monitoring system collects data from various components and displays it on Kibana to help administrators monitor and troubleshoot issues.
+=> 2. The workflow UI sends requests to the api-service via the ALB.
+=> 3. The api-service processes the requests and may call other services such as the scheduler-service to schedule jobs or the 3PL-service to perform additional functions.
+=> 4. The scheduler-service stores the schedule in a Postgres database and uses Redis to manage pending jobs.
+=> 5. The worker-service continuously checks the queue in Redis and executes the scheduled jobs.
+=> 6. The 3PL-service executes the jobs assigned by the worker-service.
+=> 7. The monitoring system collects data from various components and displays it on Kibana to help administrators monitor and troubleshoot issues.
+```
 
 ## Deployment
 
