@@ -1,0 +1,114 @@
+---
+apiVersion: v1
+data:
+  .env: |
+    PORT=8088
+    VERSION=v1
+
+    APP=worker
+
+    DATABASE_TYPE=postgres
+    DATABASE_HOST=103.82.38.155
+    DATABASE_PORT=5432
+    DATABASE_USER=postgres
+    DATABASE_PASSWORD=0Canpass!!!
+    DATABASE_SSL=disable
+
+    NUMBER_OF_WORKERS=2
+    BATCH_SIZE=10
+
+    ELASTIC_APM_SERVER_URL="http://127.0.0.1:8200"
+    ELASTIC_APM_SECRET_TOKEN="SuperSecretT0k3n"
+    ELASTIC_APM_SERVICE_NAME="workflow"
+    ELASTIC_APM_ENVIRONMENT="dev"
+    ELASTIC_APM_CAPTURE_BODY="true"
+
+kind: ConfigMap
+metadata:
+  name: worker-conf
+  namespace: dev
+  labels:
+    app: worker-service
+    env: dev
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: worker-service
+  namespace: dev
+  labels:
+    app: worker-service
+    env: dev
+spec:
+  replicas: 8
+  minReadySeconds: 30
+  strategy:
+    rollingUpdate:
+      maxUnavailable: 0
+      maxSurge: 1
+  selector:
+    matchLabels:
+      app: worker-service
+      env: dev
+  template:
+    metadata:
+      labels:
+        app: worker-service
+        env: dev
+    spec:
+      containers:
+        - name: worker-service-dev
+          image: registry.gitlab.com/huylqbk/workflow:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8088
+              protocol: TCP
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "0.1"
+            limits:
+              memory: "1Gi"
+              cpu: "2"
+          env:
+            - name: SERVICE_NAME
+              value: "worker-service"
+            - name: TZ
+              value: Asia/Ho_Chi_Minh
+          volumeMounts:
+            - name: conf
+              mountPath: /go/src/app/.env
+              subPath: .env
+      volumes:
+        - name: conf
+          configMap:
+            name: worker-conf
+            items:
+              - key: .env
+                path: .env
+                mode: 0775
+      imagePullSecrets:
+        - name: gitlab-registry
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: worker-service
+  namespace: dev
+  labels:
+    app: worker-service
+    env: dev
+spec:
+  type: ClusterIP
+  ports:
+    - port: 80
+      targetPort: 8088
+      name: http
+      protocol: TCP
+  selector:
+    app: worker-service
+    env: dev
+---
+

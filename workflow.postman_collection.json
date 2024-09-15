@@ -1,0 +1,79 @@
+{
+	"info": {
+		"_postman_id": "ec89cd3f-12e8-42c0-b497-7a17bb480a7c",
+		"name": "workflow",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "24104362"
+	},
+	"item": [
+		{
+			"name": "health-check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://103.82.38.155:8088/v1/health"
+			},
+			"response": []
+		},
+		{
+			"name": "create workflow",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\":\"abc\",\n    \"description\":\"test\",\n    \"tasks\":[\n        {\n            \"name\":\"task1\",\n            \"message\":\"xin\",\n            \"job_type\":\"period\",\n            \"job_time_value\":\"1s\"\n        },\n        {\n            \"name\":\"task2\",\n            \"message\":\"chao\",\n            \"job_type\":\"period\",\n            \"job_time_value\":\"1s\"\n        },\n        {\n            \"name\":\"task3\",\n            \"message\":\"viet\",\n            \"job_type\":\"period\",\n            \"job_time_value\":\"1s\"\n        },\n        {\n            \"name\":\"task4\",\n            \"message\":\"nam\",\n            \"job_type\":\"period\",\n            \"job_time_value\":\"1s\"\n        }\n    ]\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://103.82.38.155:8088/v1/workflow"
+			},
+			"response": []
+		},
+		{
+			"name": "get list workflow",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://103.82.38.155:8088/v1/workflow?status=&limit=10",
+					"protocol": "http",
+					"host": [
+						"103",
+						"82",
+						"38",
+						"155"
+					],
+					"port": "8088",
+					"path": [
+						"v1",
+						"workflow"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": ""
+						},
+						{
+							"key": "limit",
+							"value": "10"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "get workflow",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "http://103.82.38.155:8088/v1/workflow/83d36fbc-7487-4cee-be86-f496ea7b3c34"
+			},
+			"response": []
+		}
+	]
+}
